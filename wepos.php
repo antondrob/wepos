@@ -91,6 +91,7 @@ final class WePOS {
         add_action( 'woocommerce_loaded', [ $this, 'init_plugin' ] );
         add_action( 'woocommerce_init', [ $this, 'on_wc_init' ] );
 
+        add_filter('woocommerce_email_recipient_new_order', [ $this, 'disable_emails' ], 100, 2);
 
         // Handle Appsero tracker
         $this->appsero_init_tracker_wepos();
@@ -451,6 +452,14 @@ final class WePOS {
             // Customer should be saved during shutdown.
             add_action( 'shutdown', [ wc()->customer, 'save' ], 10 );
         }
+    }
+
+    public function disable_emails( $recipient, $order ) {
+        if ( ! is_a( $order, 'WC_Order' ) || empty( $order->get_meta( '_wepos_is_pos_order' ) ) ) {
+            return $recipient;
+        }
+
+        return '';
     }
 } // WePOS
 
