@@ -1,6 +1,8 @@
 <?php
 namespace WeDevs\WePOS\REST;
 
+use WP_REST_Request;
+
 /**
 * Product API Controller
 */
@@ -58,6 +60,26 @@ class ProductController extends \WC_REST_Products_Controller {
      * @return \WP_Error|\WP_REST_Response
      */
     public function get_products( $request ) {
-        return $this->get_items( $request );
+        /** @var WP_REST_Request $request */
+
+        if ( 'popularity' !== $request['orderby'] ) {
+            return $this->get_items( $request );
+        }
+
+        $featured_items = [];
+
+        if ( $request['page'] === 1 ) {
+            $request['include'] = wc_get_featured_product_ids();
+
+            $featured_items = $this->get_items( $request )->data;
+            unset( $request['include'] );
+        }
+
+        $request['exclude'] = wc_get_featured_product_ids();
+
+        $response =  $this->get_items( $request );
+        $response->data = array_merge( $featured_items, $response->data );
+
+        return $response;
     }
 }

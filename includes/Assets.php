@@ -130,7 +130,7 @@ class Assets {
             ],
             'wepos-wp-hook' => array(
                 'src'       => WEPOS_ASSETS . '/js/wphook'. $prefix .'.js',
-                'deps'      => array( 'jquery' ),
+                'deps'      => array( 'jquery', 'wp-hooks' ),
                 'version'   => filemtime( WEPOS_PATH . '/assets/js/wphook'. $prefix .'.js' ),
             )
         ];
