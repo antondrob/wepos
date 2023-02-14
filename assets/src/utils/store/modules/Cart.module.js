@@ -126,6 +126,24 @@ export default {
             cartObject.backorders_allowed = product.backorders_allowed;
             cartObject.stock_quantity     = product.stock_quantity;
 
+            if(product.meta_data) {
+                for (const meta_object of product.meta_data) {
+                    if(meta_object.key === '_fixed_price_rules' && meta_object.value) {
+                        cartObject.fixed_price_rules = meta_object.value;
+                        break;
+                    }
+                }
+
+                if(cartObject.fixed_price_rules) {
+                    const ar = Helper.apply_fixed_price_rules(cartObject.fixed_price_rules, cartObject.quantity)
+
+                    if(cartObject.fixed_price_rules[ar]) {
+                        cartObject.sale_price = cartObject.fixed_price_rules[ar]
+                        cartObject.on_sale = true;
+                    }
+                }
+            }
+
             var index = weLo_.findIndex( state.cartdata.line_items, { product_id: cartObject.product_id, variation_id: cartObject.variation_id} );
 
             if ( index < 0 ) {
@@ -134,7 +152,16 @@ export default {
                 }
             } else {
                 if ( Helper.hasStock( product, state.cartdata.line_items[index].quantity ) ) {
-                    state.cartdata.line_items[index].quantity += 1;
+                    state.cartdata.line_items[index].quantity = parseInt(state.cartdata.line_items[index].quantity) + 1 + '';
+
+                    if(cartObject.fixed_price_rules) {
+                        const ar = Helper.apply_fixed_price_rules(cartObject.fixed_price_rules, state.cartdata.line_items[index].quantity)
+
+                        if(cartObject.fixed_price_rules[ar]) {
+                            state.cartdata.line_items[index].sale_price = cartObject.fixed_price_rules[ar]
+                            state.cartdata.line_items[index].on_sale = true;
+                        }
+                    }
                 }
             }
         },
@@ -145,6 +172,19 @@ export default {
 
         addCartItemQuantity( state, itemKey ) {
             var item = state.cartdata.line_items[itemKey];
+
+            if(item.fixed_price_rules) {
+                const ar = Helper.apply_fixed_price_rules(item.fixed_price_rules, item.quantity + 1)
+
+                if(item.fixed_price_rules[ar]) {
+                    item.sale_price = item.fixed_price_rules[ar];
+                    item.on_sale = true;
+                } else {
+                    item.sale_price = item.sale_price_default;
+                    item.on_sale = item.on_sale_default;
+                }
+            }
+
             if ( Helper.hasStock( item, item.quantity ) ) {
                 state.cartdata.line_items[itemKey].quantity++;
             }
@@ -152,10 +192,45 @@ export default {
 
         removeCartItemQuantity( state, itemKey ) {
             var item = state.cartdata.line_items[itemKey];
+
+            if(item.fixed_price_rules) {
+                const ar = Helper.apply_fixed_price_rules(item.fixed_price_rules, item.quantity - 1)
+
+                if(item.fixed_price_rules[ar]) {
+                    item.sale_price = item.fixed_price_rules[ar];
+                    item.on_sale = true;
+                } else {
+                    item.sale_price = item.sale_price_default;
+                    item.on_sale = item.on_sale_default;
+                }
+            }
+
             if ( item.quantity <= 1 ) {
                 state.cartdata.line_items[itemKey].quantity = 1;
             } else {
                 state.cartdata.line_items[itemKey].quantity--;
+            }
+        },
+
+        changeCartItemQuantity( state, data ) {
+            var item = state.cartdata.line_items[data.key];
+
+            if(item.fixed_price_rules) {
+                const ar = Helper.apply_fixed_price_rules(item.fixed_price_rules, data.qty)
+
+                if(item.fixed_price_rules[ar]) {
+                    item.sale_price = item.fixed_price_rules[ar];
+                    item.on_sale = true;
+                } else {
+                    item.sale_price = item.sale_price_default;
+                    item.on_sale = item.on_sale_default;
+                }
+            }
+
+            if ( data.qty <= 1 ) {
+                state.cartdata.line_items[data.key].quantity = 1;
+            } else {
+                state.cartdata.line_items[data.key].quantity = data.qty;
             }
         },
 
@@ -274,6 +349,12 @@ export default {
 
         removeItemQuantityAction( context, itemKey ) {
             context.commit( 'removeCartItemQuantity', itemKey );
+            context.commit( 'calculateDiscount', context.getters );
+            context.commit( 'calculateFee', context.getters );
+        },
+
+        changeItemQuantityAction( context, itemKey, qty ) {
+            context.commit( 'changeCartItemQuantity', itemKey, qty );
             context.commit( 'calculateDiscount', context.getters );
             context.commit( 'calculateFee', context.getters );
         },

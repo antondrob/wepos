@@ -219,7 +219,7 @@
                                     <tr v-if="item.editQuantity" class="update-quantity-wrap">
                                         <td colspan="5">
                                             <span class="qty">{{ __( 'Quantity', 'wepos' ) }}</span>
-                                            <span class="qty-number"><input type="number" min="1" step="1" v-model="item.quantity"></span>
+                                            <span class="qty-number"><input type="number" min="1" step="1" @input="changeQuantity" :value="item.quantity" :data-key="key"></span>
                                             <span class="qty-action">
                                                 <a href="#" class="add" @click.prevent="addQuantity( item, key )">&#43;</a>
                                                 <a href="#" class="minus" @click.prevent="removeQuantity( item, key )">&#45;</a>
@@ -560,6 +560,7 @@ import MugenScroll from 'vue-mugen-scroll';
 import PrintReceipt from './PrintReceipt.vue';
 import PrintReceiptHtml from './PrintReceiptHtml.vue';
 import CustomerNote from './CustomerNote.vue';
+import Helper from '../../utils/store/helper';
 
 let Modal = wepos_get_lib( 'Modal' );
 
@@ -1029,6 +1030,12 @@ export default {
         },
         removeQuantity( item, key ) {
             this.$store.dispatch( 'Cart/removeItemQuantityAction', key );
+        },
+        changeQuantity(event) {
+            this.$store.dispatch( 'Cart/changeItemQuantityAction', {
+                key: parseInt(event.target.getAttribute('data-key')),
+                qty: event.target.value
+            } );
         },
         fetchGateway() {
             wepos.api.get( wepos.rest.root + wepos.rest.posversion + '/payment/gateways' )
