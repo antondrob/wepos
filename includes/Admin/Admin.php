@@ -11,6 +11,12 @@ class Admin {
         add_filter( 'manage_edit-shop_order_columns', [ $this, 'add_pos_order_column' ], 10 );
         add_action( 'manage_shop_order_posts_custom_column', [ $this, 'render_is_pos_order_content' ], 10, 2);
         add_action( 'admin_print_styles', [ $this, 'add_pos_column_style' ] );
+
+        add_action( 'product_cat_add_form_fields', array( $this, 'add_category_fields' ) );
+        add_action( 'product_cat_edit_form_fields', array( $this, 'edit_category_fields' ), 10 );
+
+        add_action( 'created_term', array( $this, 'save_category_fields' ), 10, 3 );
+        add_action( 'edit_term', array( $this, 'save_category_fields' ), 10, 3 );
     }
 
     /**
@@ -133,5 +139,48 @@ class Admin {
     public function add_pos_column_style() {
         $css = '.widefat .column-is_pos_order { width: 9% !important; text-align: center; } .widefat .column-is_pos_order span.dashicons-store{ font-size: 17px; margin-top: 3px; }';
         wp_add_inline_style( 'woocommerce_admin_styles', $css );
+    }
+
+    /**
+     * Category thumbnail fields.
+     */
+    public function add_category_fields() {
+        ?>
+        <div class="form-field term-display-type-wrap" >
+            <label for="wepos_most_popular" style="display: inline"><?php _e('Most popular category (wePOS)'); ?>: </label>
+            <input type='checkbox' name='_wepos_most_popular' value="yes" id="wepos_most_popular">
+        </div> <?php
+    }
+
+    /**
+     * Edit category thumbnail field.
+     *
+     * @param mixed $term Term (category) being edited.
+     */
+    public function edit_category_fields( $term ) {
+        $checked = get_term_meta( $term->term_id, '_wepos_most_popular', true ) === 'yes'; ?>
+        <tr class='form-field'>
+            <th scope='row'><label for='cat_page_title'><?php _e('Most popular category (wePOS)'); ?></label></th>
+            <td>
+                <input type='checkbox' name='_wepos_most_popular' value="yes" id="wepos_most_popular" <?php checked($checked) ?>>
+            </td>
+        </tr> <?php
+    }
+
+    /**
+     * Save category fields
+     *
+     * @param mixed  $term_id Term ID being saved.
+     * @param mixed  $tt_id Term taxonomy ID.
+     * @param string $taxonomy Taxonomy slug.
+     */
+    public function save_category_fields( $term_id, $tt_id = '', $taxonomy = '' ) {
+        if ( 'product_cat' === $taxonomy ) {
+            if ( isset( $_POST['_wepos_most_popular'] ) && 'yes' === $_POST['_wepos_most_popular'] ) {
+                update_term_meta( $term_id, '_wepos_most_popular', esc_attr( $_POST['_wepos_most_popular'] ) );
+            } else {
+                delete_term_meta( $term_id, '_wepos_most_popular' );
+            }
+        }
     }
 }

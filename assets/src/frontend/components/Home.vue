@@ -1083,11 +1083,9 @@ export default {
             };
         },
         fetchCategories() {
-            wepos.api.get( wepos.rest.root + wepos.rest.wcversion + '/products/categories?hide_empty=true&_fields=id,name,parent_id&per_page=100' )
+            wepos.api.get( wepos.rest.root + wepos.rest.posversion + '/products/categories?hide_empty=true&_fields=id,name,parent_id&per_page=100' )
             .then( response => {
-                response.sort(function (a, b) {
-                    return a.name.localeCompare(b.name);
-                });
+
                 var tree = function (response, root) {
                     var r = [], o = {};
                     response.forEach(function (a) {
