@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: wePOS - Point Of Sale (POS) for WooCommerce
+Plugin Name: wePOS - Point Of Sale (POS) for WooCommerce (Onepix version)
 Plugin URI: https://wedevs.com/wepos
 Description: A beautiful and fast Point of Sale (POS) system for WooCommerce
-Version: 1.2.6
+Version: 100.0.0
 Author: weDevs
 Author URI: https://wedevs.com/
 Text Domain: wepos
@@ -41,6 +41,9 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 // don't call the file directly
+use WeDevs\WePOS\Integrations\Kiosk\Kiosk;
+use WeDevs\WePOS\Integrations\Kiosk\ProductsCreator;
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -350,6 +353,8 @@ final class WePOS {
             new WeDevs\WePOS\Admin\Products();
             new WeDevs\WePOS\Admin\Updates();
             new WeDevs\WePOS\Admin\LimitedTimePromotion();
+
+            ProductsCreator::create_products();
         } else {
             $this->container['frontend'] = new WeDevs\WePOS\Frontend();
         }
@@ -364,6 +369,8 @@ final class WePOS {
 
         // Payment gateway manager
         $this->container['gateways'] = new \WeDevs\WePOS\Gateways\Manager();
+
+        $this->container['kiosk'] = new Kiosk;
     }
 
     /**

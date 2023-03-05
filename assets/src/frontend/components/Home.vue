@@ -56,6 +56,10 @@
             <div class="items-wrapper" :class="productView" ref="items-wrapper">
                 <template v-if="!productLoading">
                     <div class="item" v-if="getFilteredProduct.length > 0" v-for="product in getFilteredProduct">
+                        <template v-if="product.type === 'kiosk'">
+                            <div class="item-wrap">Kiosk in future</div>
+                        </template>
+
                         <template v-if="product.type === 'simple'">
                             <div class="item-wrap" :class="{ 'disabled': ! hasStock( product ) }" @click.prevent="addToCart(product)">
                                 <div class="img">
@@ -589,7 +593,12 @@ export default {
             viewVariationPopover: false,
             showModal: false,
             showPaymentReceipt: false,
-            products: [],
+            products: [
+                {
+                    type: 'kiosk',
+                    manage_stock: false
+                }
+            ],
             filteredProducts: [],
             totalPages: 1,
             page: 1,
@@ -622,6 +631,7 @@ export default {
             beforCartPanels: wepos.hooks.applyFilters( 'wepos_before_cart_panel', [] ),
         }
     },
+
     computed: {
         cartdata() {
             return this.$store.state.Cart.cartdata;
