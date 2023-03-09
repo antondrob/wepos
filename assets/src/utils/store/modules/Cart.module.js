@@ -173,6 +173,8 @@ export default {
             cartObject.regular_price      = product.price;
             cartObject.quantity           = 1;
 
+            cartObject.tax_amount         = 0;
+
             var index = weLo_.findIndex( state.cartdata.line_items, { product_id: cartObject.product_id } );
 
             if( index < 0 ) {
