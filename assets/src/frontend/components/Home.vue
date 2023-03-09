@@ -57,7 +57,7 @@
                 <template v-if="!productLoading">
                     <div class="item" v-if="getFilteredProduct.length > 0" v-for="product in getFilteredProduct">
                         <template v-if="product.type === 'kiosk'">
-                            <div class="item-wrap">
+                            <div class="item-wrap item-wrap__kiosk">
                                 <div class="img">
                                     <img src="https://via.placeholder.com/300x300/3b80f4/ffffff?text=Kiosk" alt="kiosk product">
                                 </div>
@@ -65,11 +65,11 @@
                                 <div class="product-name">{{ product.name }}</div>
 
                                 <div class="meta">
-                                    <input type="number" min="0" step="0.01" value="" v-model="product.price">
-                                    <input type="text" name="sku" v-model="product.sku">
+                                    <input type="number" min="0" step="0.01" value="" v-model="product.price" class="kiosk-input" placeholder="Price">
+                                    <input type="text" name="sku" v-model="product.sku" class="kiosk-input" placeholder="Order number">
                                 </div>
 
-                                <button @click.prevent="addKioskToCart(product)">Add to cart</button>
+                                <button @click.prevent="addKioskToCart(product)" class="kiosk-button">Add to cart</button>
                             </div>
                         </template>
 
@@ -628,7 +628,7 @@ export default {
                     type: 'kiosk',
                     name: 'Kiosk',
                     manage_stock: false,
-                    price: 0,
+                    price: '',
                     sku: ''
                 }
             ],
@@ -1229,6 +1229,46 @@ export default {
 </script>
 
 <style lang="less">
+
+.kiosk {
+    &-input {
+        width: 100%;
+        font-size: 14px;
+        height: 35px;
+        margin-top: -1px;
+        border: 1px solid #E9EDF0;
+        line-height: 10px;
+        padding-right: 5px;
+        padding-left: 5px;
+        box-sizing: border-box;
+        border-radius: 3px;
+        box-shadow: 0 3px 15px 0 rgba(0,0,0,.02);
+        cursor: pointer;
+    }
+
+    &-button {
+        box-sizing: border-box;
+        display: inline-block;
+        font-size: 13px;
+        height: 35px;
+        line-height: 14px;
+        padding: 10px;
+        text-decoration: none;
+        background: #3b80f4;
+        color: #fff;
+        border: none;
+        margin: 5px 0 5px 0;
+        cursor: pointer;
+
+        .items-wrapper.list & {
+            margin-left: 5px;
+        }
+    }
+}
+
+.item-wrap__kiosk {
+    cursor: default;
+}
 
 #wepos-main {
     padding: 20px;
