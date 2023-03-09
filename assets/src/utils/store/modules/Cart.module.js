@@ -165,6 +165,22 @@ export default {
                 }
             }
         },
+        addKioskToCart( state, product ) {
+            var cartObject = {};
+            cartObject.type               = 'kiosk';
+            cartObject.product_id         = `kiosk-${product.sku}` ;
+            cartObject.name               = `Kiosk (${product.sku})`;
+            cartObject.regular_price      = product.price;
+            cartObject.quantity           = 1;
+
+            var index = weLo_.findIndex( state.cartdata.line_items, { product_id: cartObject.product_id } );
+
+            if( index < 0 ) {
+                state.cartdata.line_items.push( cartObject );
+            } else {
+                alert( 'Kiosk order with the same number already in cart' );
+            }
+        },
 
         removeCartItem( state, itemKey ) {
             state.cartdata.line_items.splice( itemKey, 1 );
@@ -331,6 +347,12 @@ export default {
 
         addToCartAction( context, product ) {
             context.commit( 'addToCartItem', product );
+            context.commit( 'calculateDiscount', context.getters );
+            context.commit( 'calculateFee', context.getters );
+        },
+
+        addKioskToCart( context, product ) {
+            context.commit( 'addKioskToCart', product );
             context.commit( 'calculateDiscount', context.getters );
             context.commit( 'calculateFee', context.getters );
         },

@@ -57,7 +57,20 @@
                 <template v-if="!productLoading">
                     <div class="item" v-if="getFilteredProduct.length > 0" v-for="product in getFilteredProduct">
                         <template v-if="product.type === 'kiosk'">
-                            <div class="item-wrap">Kiosk in future</div>
+                            <div class="item-wrap">
+                                <div class="img">
+                                    <img src="https://via.placeholder.com/300x300/3b80f4/ffffff?text=Kiosk" alt="kiosk product">
+                                </div>
+
+                                <div class="product-name">{{ product.name }}</div>
+
+                                <div class="meta">
+                                    <input type="number" min="0" step="0.01" value="" v-model="product.price">
+                                    <input type="text" name="sku" v-model="product.sku">
+                                </div>
+
+                                <button @click.prevent="addKioskToCart(product)">Add to cart</button>
+                            </div>
                         </template>
 
                         <template v-if="product.type === 'simple'">
@@ -194,42 +207,59 @@
                         <tbody>
                             <template v-if="cartdata.line_items.length > 0">
                                 <template v-for="(item,key) in cartdata.line_items">
-                                    <tr>
-                                        <td class="name" @click="toggleEditQuantity( item, key )">
-                                            {{ item.name }}
-                                            <div class="attribute" v-if="item.attribute.length > 0 && item.type === 'variable'">
-                                                <ul>
-                                                    <li v-for="attribute_item in item.attribute"><span class="attr_name">{{ attribute_item.name }}</span>: <span class="attr_value">{{ attribute_item.option }}</span></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        <td class="qty" @click="toggleEditQuantity( item, key )">{{ item.quantity }}</td>
-                                        <td class="price" @click="toggleEditQuantity( item, key )">
-                                            <template v-if="item.on_sale">
-                                                <span class="sale-price">{{ formatPrice( item.quantity*item.sale_price ) }}</span>
-                                                <span class="regular-price">{{ formatPrice( item.quantity*item.regular_price ) }}</span>
-                                            </template>
-                                            <template v-else>
-                                                <span class="sale-price">{{ formatPrice( item.quantity*item.regular_price ) }}</span>
-                                            </template>
-                                        </td>
-                                        <td class="action">
-                                            <span class="flaticon-right-arrow" :class="{ open: item.editQuantity }" @click.prevent="toggleEditQuantity( item, key )"></span>
-                                        </td>
-                                        <td class="remove">
-                                            <span class="flaticon-cancel-music" @click.prevent="removeItem(key)"></span>
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.editQuantity" class="update-quantity-wrap">
-                                        <td colspan="5">
-                                            <span class="qty">{{ __( 'Quantity', 'wepos' ) }}</span>
-                                            <span class="qty-number"><input type="number" min="1" step="1" @input="changeQuantity" :value="item.quantity" :data-key="key"></span>
-                                            <span class="qty-action">
+                                    <template v-if="item.type === 'kiosk'">
+                                        <tr>
+                                            <td class="name">
+                                                {{ item.name }}
+                                            </td>
+                                            <td class="qty">{{ item.quantity }}</td>
+                                            <td class="price">
+                                                <span class="sale-price">{{ formatPrice( item.regular_price ) }}</span>
+                                            </td>
+                                            <td class="action"></td>
+                                            <td class="remove">
+                                                <span class="flaticon-cancel-music" @click.prevent="removeItem(key)"></span>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <template v-else>
+                                        <tr>
+                                            <td class="name" @click="toggleEditQuantity( item, key )">
+                                                {{ item.name }}
+                                                <div class="attribute" v-if="item.attribute.length > 0 && item.type === 'variable'">
+                                                    <ul>
+                                                        <li v-for="attribute_item in item.attribute"><span class="attr_name">{{ attribute_item.name }}</span>: <span class="attr_value">{{ attribute_item.option }}</span></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td class="qty" @click="toggleEditQuantity( item, key )">{{ item.quantity }}</td>
+                                            <td class="price" @click="toggleEditQuantity( item, key )">
+                                                <template v-if="item.on_sale">
+                                                    <span class="sale-price">{{ formatPrice( item.quantity*item.sale_price ) }}</span>
+                                                    <span class="regular-price">{{ formatPrice( item.quantity*item.regular_price ) }}</span>
+                                                </template>
+                                                <template v-else>
+                                                    <span class="sale-price">{{ formatPrice( item.quantity*item.regular_price ) }}</span>
+                                                </template>
+                                            </td>
+                                            <td class="action">
+                                                <span class="flaticon-right-arrow" :class="{ open: item.editQuantity }" @click.prevent="toggleEditQuantity( item, key )"></span>
+                                            </td>
+                                            <td class="remove">
+                                                <span class="flaticon-cancel-music" @click.prevent="removeItem(key)"></span>
+                                            </td>
+                                        </tr>
+                                        <tr v-if="item.editQuantity" class="update-quantity-wrap">
+                                            <td colspan="5">
+                                                <span class="qty">{{ __( 'Quantity', 'wepos' ) }}</span>
+                                                <span class="qty-number"><input type="number" min="1" step="1" @input="changeQuantity" :value="item.quantity" :data-key="key"></span>
+                                                <span class="qty-action">
                                                 <a href="#" class="add" @click.prevent="addQuantity( item, key )">&#43;</a>
                                                 <a href="#" class="minus" @click.prevent="removeQuantity( item, key )">&#45;</a>
                                             </span>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    </template>
                                 </template>
                             </template>
                             <template v-else>
@@ -596,7 +626,10 @@ export default {
             products: [
                 {
                     type: 'kiosk',
-                    manage_stock: false
+                    name: 'Kiosk',
+                    manage_stock: false,
+                    price: 0,
+                    sku: ''
                 }
             ],
             filteredProducts: [],
@@ -978,7 +1011,7 @@ export default {
                     });
 
                     cartData.line_items.forEach( ( product, key ) => {
-                        if ( ! foundProducts.includes( product.product_id ) ) {
+                        if ( product.type !== 'kiosk' && ! foundProducts.includes( product.product_id ) ) {
                             cartData.line_items.splice( key, 1 );
                             localStorage.setItem( 'cartdata', JSON.stringify( cartData ) );
                         }
@@ -1028,6 +1061,17 @@ export default {
             }
 
             this.$store.dispatch( 'Cart/addToCartAction', product );
+        },
+        addKioskToCart( product ) {
+            if (!product.price || !product.sku) {
+                alert( 'Empty price or Kiosk order number' );
+                return;
+            }
+
+            this.$store.dispatch( 'Cart/addKioskToCart', product );
+
+            product.price = '';
+            product.sku = '';
         },
         toggleEditQuantity( product, key ) {
             this.$store.dispatch( 'Cart/toggleEditQuantityAction', key );
