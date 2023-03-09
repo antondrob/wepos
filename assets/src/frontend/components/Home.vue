@@ -450,13 +450,13 @@
                                     <tr v-for="item in cartdata.line_items">
                                         <td class="name">
                                             {{ item.name }}
-                                            <div class="attribute" v-if="item.attribute.length > 0 && item.type === 'variable'">
+                                            <div class="attribute" v-if="item.type !== 'kiosk' && item.attribute.length > 0 && item.type === 'variable'">
                                                 <ul>
                                                     <li v-for="attribute_item in item.attribute"><span class="attr_name">{{ attribute_item.name }}</span>: <span class="attr_value">{{ attribute_item.option }}</span></li>
                                                 </ul>
                                             </div>
                                         </td>
-                                        <td class="quantity">{{ item.quantity }}</td>
+                                        <td class="quantity">{{ item.type !== 'kiosk' ? item.quantity : '' }}</td>
                                         <td class="price">
                                             <template v-if="item.on_sale">
                                                 <span class="sale-price">{{ formatPrice( item.quantity*item.sale_price ) }}</span>
