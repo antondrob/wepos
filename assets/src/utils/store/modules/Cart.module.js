@@ -175,6 +175,9 @@ export default {
 
             cartObject.tax_amount         = 0;
 
+            cartObject.total              = product.price;
+            cartObject.subtotal           = product.price;
+
             var index = weLo_.findIndex( state.cartdata.line_items, { product_id: cartObject.product_id } );
 
             if( index < 0 ) {

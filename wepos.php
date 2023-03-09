@@ -350,8 +350,6 @@ final class WePOS {
             new WeDevs\WePOS\Admin\Products();
             new WeDevs\WePOS\Admin\Updates();
             new WeDevs\WePOS\Admin\LimitedTimePromotion();
-
-            ProductsCreator::create_products();
         } else {
             $this->container['frontend'] = new WeDevs\WePOS\Frontend();
         }

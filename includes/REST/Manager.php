@@ -169,6 +169,11 @@ class Manager {
 
         foreach ( $items as $item ) {
             $product              = $item->get_product();
+
+            if ( empty( $product ) ) {
+                continue; //Kiosk product
+            }
+
             $is_manage_stock      = $product->get_manage_stock();
             $is_backorder_allowed = $product->get_backorders();
 
