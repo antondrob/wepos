@@ -41,9 +41,6 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 // don't call the file directly
-use WeDevs\WePOS\Integrations\Kiosk\Kiosk;
-use WeDevs\WePOS\Integrations\Kiosk\ProductsCreator;
-
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -369,8 +366,6 @@ final class WePOS {
 
         // Payment gateway manager
         $this->container['gateways'] = new \WeDevs\WePOS\Gateways\Manager();
-
-        $this->container['kiosk'] = new Kiosk;
     }
 
     /**
