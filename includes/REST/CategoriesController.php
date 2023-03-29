@@ -138,3 +138,10 @@ class CategoriesController extends WC_REST_Product_Categories_Controller {
         return $response;
     }
 }
+
+add_filter( 'woocommerce_rest_prepare_product_cat',function($response, $item, $request){
+    $data = $response->get_data();
+    $data['most_popular'] = !!get_term_meta( $item->term_id, '_wepos_most_popular', true );
+    $response->set_data( $data );
+    return $response;
+}, 1000, 3);

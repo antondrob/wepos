@@ -55,53 +55,37 @@
             </div>
             <div class="items-wrapper" :class="productView" ref="items-wrapper">
                 <template v-if="!productLoading">
-                    <div class="item" v-if="getFilteredProduct.length > 0" v-for="product in getFilteredProduct">
-                        <template v-if="product.type === 'kiosk'">
-                            <div class="item-wrap item-wrap__kiosk">
-                                <div class="img">
-                                    <img src="https://via.placeholder.com/300x300/3b80f4/ffffff?text=Kiosk" alt="kiosk product">
+
+                    <template v-if="mostPopularCats.length > 0">
+                        <h2>Featured categories</h2>
+
+                        <div class="item item_cat">
+                            <div class="item-wrap" @click.prevent="handleCategoryRemove()">
+                                <div class="title">
+                                    All
                                 </div>
+                            </div>
+                        </div>
 
-                                <div class="product-name">{{ product.name }}</div>
-
-                                <div class="meta">
-                                    <input type="number" min="0" step="0.01" value="" v-model="product.price" class="kiosk-input" placeholder="Price">
-                                    <input type="text" name="sku" v-model="product.sku" class="kiosk-input" placeholder="Order number">
+                        <template v-for="cat in mostPopularCats">
+                            <div class="item item_cat">
+                                <div class="item-wrap" @click.prevent="handleCategorySelect({id:cat.id})">
+                                    <div class="title">
+                                        {{ cat.name }}
+                                    </div>
                                 </div>
-
-                                <button @click.prevent="addKioskToCart(product)" class="kiosk-button">Add to cart</button>
                             </div>
                         </template>
 
-                        <template v-if="product.type === 'simple'">
-                            <div class="item-wrap" :class="{ 'disabled': ! hasStock( product ) }" @click.prevent="addToCart(product)">
-                                <div class="img">
-                                    <img :src="getProductImage(product)" :alt="getProductImageName( product )">
-                                </div>
-                                <div class="title" v-if="productView === 'grid'">
-                                    {{ truncateTitle( product.name, 20 ) }}
-                                </div>
-                                <div class="title" v-else>
-                                    <div class="product-name">{{ product.name }}</div>
+                        <div class="item-line-break"></div>
+                    </template>
 
-                                    <ul class="meta">
-                                        <li v-if="product.sku">
-                                            <span class="label">{{ __( 'Sku :', 'wepos' ) }}</span>
-                                            <span class="value">{{ product.sku }}</span>
-                                        </li>
-                                        <li>
-                                            <span class="label">{{ __( 'Price :', 'wepos' ) }}</span>
-                                            <span class="value" v-html="product.price_html"></span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <span class="add-product-icon flaticon-add" :class="productView"></span>
-                            </div>
-                        </template>
+                    <template v-if="featuredProducts.length > 0">
+                        <h2>Featured products</h2>
 
-                        <template v-if="product.type === 'variable'">
-                            <v-popover offset="10" popover-base-class="product-variation tooltip popover" placement="left-end">
-                                <div class="item-wrap" @click="selectVariationProduct( product )">
+                        <template v-for="product in featuredProducts">
+                            <div class="item" v-if="product.type === 'simple'">
+                                <div class="item-wrap" :class="{ 'disabled': ! hasStock( product ) }" @click.prevent="addToCart(product)">
                                     <div class="img">
                                         <img :src="getProductImage(product)" :alt="getProductImageName( product )">
                                     </div>
@@ -110,44 +94,178 @@
                                     </div>
                                     <div class="title" v-else>
                                         <div class="product-name">{{ product.name }}</div>
+
                                         <ul class="meta">
+                                            <li v-if="product.sku">
+                                                <span class="label">{{ __( 'Sku :', 'wepos' ) }}</span>
+                                                <span class="value">{{ product.sku }}</span>
+                                            </li>
                                             <li>
                                                 <span class="label">{{ __( 'Price :', 'wepos' ) }}</span>
                                                 <span class="value" v-html="product.price_html"></span>
                                             </li>
                                         </ul>
-
                                     </div>
                                     <span class="add-product-icon flaticon-add" :class="productView"></span>
                                 </div>
-                                <template slot="popover">
-                                    <div class="variation-header">
-                                        {{ __( 'Select Variations', 'wepos' ) }}
+                            </div>
+
+                            <div class="item" v-if="product.type === 'variable'">
+                                <v-popover offset="10" popover-base-class="product-variation tooltip popover" placement="left-end">
+                                    <div class="item-wrap" @click="selectVariationProduct( product )">
+                                        <div class="img">
+                                            <img :src="getProductImage(product)" :alt="getProductImageName( product )">
+                                        </div>
+                                        <div class="title" v-if="productView === 'grid'">
+                                            {{ truncateTitle( product.name, 20 ) }}
+                                        </div>
+                                        <div class="title" v-else>
+                                            <div class="product-name">{{ product.name }}</div>
+                                            <ul class="meta">
+                                                <li>
+                                                    <span class="label">{{ __( 'Price :', 'wepos' ) }}</span>
+                                                    <span class="value" v-html="product.price_html"></span>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                        <span class="add-product-icon flaticon-add" :class="productView"></span>
                                     </div>
-                                    <div class="variation-body">
-                                        <template v-for="attribute in product.attributes">
-                                            <div class="attribute">
-                                                <p>{{ attribute.name }}</p>
-                                                <div class="options">
-                                                    <template v-for="option in attribute.options">
-                                                        <label>
-                                                            <input type="radio" v-model="selectedAttribute[attribute.name]" :value="option">
-                                                            <div class="box">
-                                                                {{ option }}
-                                                            </div>
-                                                        </label>
-                                                    </template>
+                                    <template slot="popover">
+                                        <div class="variation-header">
+                                            {{ __( 'Select Variations', 'wepos' ) }}
+                                        </div>
+                                        <div class="variation-body">
+                                            <template v-for="attribute in product.attributes">
+                                                <div class="attribute">
+                                                    <p>{{ attribute.name }}</p>
+                                                    <div class="options">
+                                                        <template v-for="option in attribute.options">
+                                                            <label>
+                                                                <input type="radio" v-model="selectedAttribute[attribute.name]" :value="option">
+                                                                <div class="box">
+                                                                    {{ option }}
+                                                                </div>
+                                                            </label>
+                                                        </template>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </template>
-                                    </div>
-                                    <div class="variation-footer">
-                                        <button :disabled="attributeDisabled" @click.prevent="addVariationProduct">{{ __( 'Add Product', 'wepos' ) }}</button>
-                                    </div>
-                                </template>
-                            </v-popover>
+                                            </template>
+                                        </div>
+                                        <div class="variation-footer">
+                                            <button :disabled="attributeDisabled" @click.prevent="addVariationProduct">{{ __( 'Add Product', 'wepos' ) }}</button>
+                                        </div>
+                                    </template>
+                                </v-popover>
+                            </div>
                         </template>
-                    </div>
+
+                        <div class="item-line-break"></div>
+                    </template>
+
+                    <template  v-if="getFilteredProduct.length > 0">
+                        <h2>All products</h2>
+
+                        <template v-if="kioskProduct">
+                            <div class="item">
+                                <div class="item-wrap item-wrap__kiosk">
+                                    <div class="img">
+                                        <img src="https://via.placeholder.com/300x300/3b80f4/ffffff?text=Kiosk"
+                                             alt="kiosk product">
+                                    </div>
+
+                                    <div class="product-name">{{ kioskProduct.name }}</div>
+
+                                    <div class="meta">
+                                        <input type="number" min="0" step="0.01" value="" v-model="kioskProduct.price"
+                                               class="kiosk-input" placeholder="Price">
+                                        <input type="text" name="sku" v-model="kioskProduct.sku" class="kiosk-input"
+                                               placeholder="Order number">
+                                    </div>
+
+                                    <button @click.prevent="addKioskToCart(kioskProduct)" class="kiosk-button">Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template v-for="product in getFilteredProduct">
+                            <div class="item" v-if="product.type === 'simple'">
+                                <div class="item-wrap" :class="{ 'disabled': ! hasStock( product ) }" @click.prevent="addToCart(product)">
+                                    <div class="img">
+                                        <img :src="getProductImage(product)" :alt="getProductImageName( product )">
+                                    </div>
+                                    <div class="title" v-if="productView === 'grid'">
+                                        {{ truncateTitle( product.name, 20 ) }}
+                                    </div>
+                                    <div class="title" v-else>
+                                        <div class="product-name">{{ product.name }}</div>
+
+                                        <ul class="meta">
+                                            <li v-if="product.sku">
+                                                <span class="label">{{ __( 'Sku :', 'wepos' ) }}</span>
+                                                <span class="value">{{ product.sku }}</span>
+                                            </li>
+                                            <li>
+                                                <span class="label">{{ __( 'Price :', 'wepos' ) }}</span>
+                                                <span class="value" v-html="product.price_html"></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <span class="add-product-icon flaticon-add" :class="productView"></span>
+                                </div>
+                            </div>
+
+                            <div class="item" v-if="product.type === 'variable'">
+                                <v-popover offset="10" popover-base-class="product-variation tooltip popover" placement="left-end">
+                                    <div class="item-wrap" @click="selectVariationProduct( product )">
+                                        <div class="img">
+                                            <img :src="getProductImage(product)" :alt="getProductImageName( product )">
+                                        </div>
+                                        <div class="title" v-if="productView === 'grid'">
+                                            {{ truncateTitle( product.name, 20 ) }}
+                                        </div>
+                                        <div class="title" v-else>
+                                            <div class="product-name">{{ product.name }}</div>
+                                            <ul class="meta">
+                                                <li>
+                                                    <span class="label">{{ __( 'Price :', 'wepos' ) }}</span>
+                                                    <span class="value" v-html="product.price_html"></span>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                        <span class="add-product-icon flaticon-add" :class="productView"></span>
+                                    </div>
+                                    <template slot="popover">
+                                        <div class="variation-header">
+                                            {{ __( 'Select Variations', 'wepos' ) }}
+                                        </div>
+                                        <div class="variation-body">
+                                            <template v-for="attribute in product.attributes">
+                                                <div class="attribute">
+                                                    <p>{{ attribute.name }}</p>
+                                                    <div class="options">
+                                                        <template v-for="option in attribute.options">
+                                                            <label>
+                                                                <input type="radio" v-model="selectedAttribute[attribute.name]" :value="option">
+                                                                <div class="box">
+                                                                    {{ option }}
+                                                                </div>
+                                                            </label>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="variation-footer">
+                                            <button :disabled="attributeDisabled" @click.prevent="addVariationProduct">{{ __( 'Add Product', 'wepos' ) }}</button>
+                                        </div>
+                                    </template>
+                                </v-popover>
+                            </div>
+                        </template>
+                    </template>
                     <div class="no-product-found" v-if="getFilteredProduct.length <= 0">
                         <img :src="wepos.assets_url+ '/images/no-product.png'" alt="" width="120px">
                         <p>{{ __( 'No Product Found', 'wepos' ) }}</p>
@@ -685,14 +803,42 @@ export default {
             }
         },
         getFilteredProduct() {
+            let products = this.products;
+
             if ( this.$route.query.category !== undefined ) {
-                return  this.products.filter( (product) => {
+                products = this.products.filter( (product) => {
                     var foundCat = weLo_.find( product.categories, { id : parseInt( this.$route.query.category ) } );
                     return foundCat != undefined && Object.keys(foundCat).length > 0;
                 } );
-            } else {
-                return this.products;
             }
+
+            return products.filter((product) => !product.featured)
+        },
+        kioskProduct() {
+            return this.getFilteredProduct.find((product) => product.type === 'kiosk')
+        },
+        featuredProducts() {
+            let products = this.products;
+
+            if ( this.$route.query.category !== undefined ) {
+                products = this.products.filter( (product) => {
+                    var foundCat = weLo_.find( product.categories, { id : parseInt( this.$route.query.category ) } );
+                    return foundCat != undefined && Object.keys(foundCat).length > 0;
+                } );
+            }
+
+            return products.filter((product) => product.featured)
+        },
+        mostPopularCats() {
+            const added = [];
+            return this.categories.filter((cat) => {
+                if(cat.most_popular && !added.includes(cat.id)) {
+                    added.push(cat.id)
+                    return true;
+                }
+
+                return false;
+            });
         },
         changeAmount() {
             var returnMoney = this.unFormat(this.cashAmount) - this.$store.getters['Cart/getTotal'];
@@ -1137,7 +1283,7 @@ export default {
             };
         },
         fetchCategories() {
-            wepos.api.get( wepos.rest.root + wepos.rest.posversion + '/products/categories?hide_empty=true&_fields=id,name,parent_id&per_page=100' )
+            wepos.api.get( wepos.rest.root + wepos.rest.posversion + '/products/categories?hide_empty=true&_fields=id,name,parent_id,most_popular&per_page=100' )
             .then( response => {
 
                 var tree = function (response, root) {
@@ -1268,6 +1414,41 @@ export default {
 
 .item-wrap__kiosk {
     cursor: default;
+}
+
+.item-line-break {
+    width: 100%;
+}
+
+.items-wrapper h2 {
+    display: inline-block;
+    width: 100%;
+}
+
+.items-wrapper.list .item_cat {
+    min-height: 30px;
+}
+
+.items-wrapper.list .item_cat {
+    float: left;
+    padding: 0 5px 0 5px;
+}
+
+.items-wrapper.list .item_cat .item-wrap {
+
+}
+
+.items-wrapper.list .item_cat .title {
+    float: unset !important;
+    position: static !important;
+    max-width: unset !important;
+    margin: unset !important;
+    height:unset !important;
+
+    padding: 10px;
+    min-width: 100px;
+    text-align: center;
+    line-height: 30px;
 }
 
 #wepos-main {
