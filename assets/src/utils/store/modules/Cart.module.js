@@ -174,6 +174,7 @@ export default {
             cartObject.quantity           = 1;
 
             cartObject.tax_amount         = 0;
+            cartObject.attribute          = [];
 
             cartObject.total              = product.price;
             cartObject.subtotal           = product.price;
