@@ -170,8 +170,8 @@
                             <div class="item">
                                 <div class="item-wrap item-wrap__kiosk">
                                     <div class="img">
-                                        <img src="https://via.placeholder.com/300x300/3b80f4/ffffff?text=Kiosk"
-                                             alt="kiosk product">
+                                        <img src="https://via.placeholder.com/300x300/3b80f4/ffffff?text=PRINTS"
+                                             alt="PRINTS product">
                                     </div>
 
                                     <div class="product-name">{{ kioskProduct.name }}</div>
@@ -744,7 +744,7 @@ export default {
             products: [
                 {
                     type: 'kiosk',
-                    name: 'Kiosk',
+                    name: 'PRINTS',
                     manage_stock: false,
                     price: '',
                     sku: ''

@@ -169,7 +169,7 @@ export default {
             var cartObject = {};
             cartObject.type               = 'kiosk';
             cartObject.product_id         = `kiosk-${product.sku}` ;
-            cartObject.name               = `Kiosk (${product.sku})`;
+            cartObject.name               = `PRINTS (${product.sku})`;
             cartObject.regular_price      = product.price;
             cartObject.quantity           = 1;
 
