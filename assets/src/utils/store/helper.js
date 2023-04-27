@@ -16,7 +16,7 @@ export default {
         if (fixed_price_rules) {
             Object.entries(fixed_price_rules).forEach(function([key, value]) {
                 key = parseInt(key);
-                console.log(minDiscountQuantity, quantity, key, key <= quantity, key > minDiscountQuantity)
+
                 if (key <= quantity && key > minDiscountQuantity) {
                     minDiscountQuantity = key;
                 }

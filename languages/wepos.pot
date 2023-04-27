@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: wePOS - Point Of Sale (POS) for WooCommerce (Onepix "
 "version) 100.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wepos\n"
-"POT-Creation-Date: 2023-04-20 12:39:16+00:00\n"
+"POT-Creation-Date: 2023-04-27 19:03:21+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -238,7 +238,7 @@ msgstr ""
 #: assets/src/frontend/components/Home.vue:411
 #: assets/src/frontend/components/Home.vue:446
 #: assets/src/frontend/components/Home.vue:606
-#: assets/src/frontend/components/Home.vue:1072
+#: assets/src/frontend/components/Home.vue:1074
 #: assets/src/frontend/components/PrintReceiptHtml.vue:43
 msgid "Discount"
 msgstr ""
@@ -266,7 +266,7 @@ msgstr ""
 #: assets/src/frontend/components/Home.vue:432
 #: assets/src/frontend/components/Home.vue:447
 #: assets/src/frontend/components/Home.vue:610
-#: assets/src/frontend/components/Home.vue:1090
+#: assets/src/frontend/components/Home.vue:1092
 #: assets/src/frontend/components/PrintReceiptHtml.vue:47
 msgid "Fee"
 msgstr ""
@@ -382,17 +382,17 @@ msgstr ""
 msgid "Change money"
 msgstr ""
 
-#: assets/src/frontend/components/Home.vue:893
-#: assets/src/frontend/components/Home.vue:1279
-#: assets/src/frontend/components/Home.vue:1305
+#: assets/src/frontend/components/Home.vue:894
+#: assets/src/frontend/components/Home.vue:1281
+#: assets/src/frontend/components/Home.vue:1307
 msgid "All categories"
 msgstr ""
 
-#: assets/src/frontend/components/Home.vue:1185
+#: assets/src/frontend/components/Home.vue:1187
 msgid "This product is out of stock."
 msgstr ""
 
-#: assets/src/frontend/components/Home.vue:1201
+#: assets/src/frontend/components/Home.vue:1203
 msgid "Product is out of stock!"
 msgstr ""
 

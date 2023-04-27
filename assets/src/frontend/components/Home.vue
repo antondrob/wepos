@@ -743,6 +743,7 @@ export default {
             showPaymentReceipt: false,
             products: [
                 {
+                    id: 0,
                     type: 'kiosk',
                     name: 'PRINTS',
                     manage_stock: false,
@@ -1064,6 +1065,7 @@ export default {
         },
         getProductImage(product) {
             return '';
+            // return ( product.images.length > 0 ) ? product.images[0].woocommerce_thumbnail : wepos.placeholder_image;
         },
         getProductImageName(product) {
             return ( product.images.length > 0 ) ? product.images[0].name : product.name;
