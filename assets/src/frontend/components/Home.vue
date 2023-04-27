@@ -1064,8 +1064,8 @@ export default {
             return !( this.orderdata.payment_method == undefined || this.orderdata.payment_method == '' );
         },
         getProductImage(product) {
-            return '';
-            // return ( product.images.length > 0 ) ? product.images[0].woocommerce_thumbnail : wepos.placeholder_image;
+            // return '';
+            return ( product.images.length > 0 ) ? product.images[0].woocommerce_thumbnail : wepos.placeholder_image;
         },
         getProductImageName(product) {
             return ( product.images.length > 0 ) ? product.images[0].name : product.name;
