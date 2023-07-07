@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: wePOS - Point Of Sale (POS) for WooCommerce (Onepix "
 "version) 100.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wepos\n"
-"POT-Creation-Date: 2023-04-27 19:07:32+00:00\n"
+"POT-Creation-Date: 2023-07-07 10:47:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -238,7 +238,7 @@ msgstr ""
 #: assets/src/frontend/components/Home.vue:411
 #: assets/src/frontend/components/Home.vue:446
 #: assets/src/frontend/components/Home.vue:606
-#: assets/src/frontend/components/Home.vue:1074
+#: assets/src/frontend/components/Home.vue:1077
 #: assets/src/frontend/components/PrintReceiptHtml.vue:43
 msgid "Discount"
 msgstr ""
@@ -266,7 +266,7 @@ msgstr ""
 #: assets/src/frontend/components/Home.vue:432
 #: assets/src/frontend/components/Home.vue:447
 #: assets/src/frontend/components/Home.vue:610
-#: assets/src/frontend/components/Home.vue:1092
+#: assets/src/frontend/components/Home.vue:1095
 #: assets/src/frontend/components/PrintReceiptHtml.vue:47
 msgid "Fee"
 msgstr ""
@@ -383,16 +383,16 @@ msgid "Change money"
 msgstr ""
 
 #: assets/src/frontend/components/Home.vue:894
-#: assets/src/frontend/components/Home.vue:1281
-#: assets/src/frontend/components/Home.vue:1307
+#: assets/src/frontend/components/Home.vue:1284
+#: assets/src/frontend/components/Home.vue:1310
 msgid "All categories"
 msgstr ""
 
-#: assets/src/frontend/components/Home.vue:1187
+#: assets/src/frontend/components/Home.vue:1190
 msgid "This product is out of stock."
 msgstr ""
 
-#: assets/src/frontend/components/Home.vue:1203
+#: assets/src/frontend/components/Home.vue:1206
 msgid "Product is out of stock!"
 msgstr ""
 
@@ -527,7 +527,7 @@ msgstr ""
 msgid "Have your customers pay with cash"
 msgstr ""
 
-#: includes/Gateways/Cash.php:48
+#: includes/Gateways/Cash.php:48 includes/Gateways/Custom_Card.php:48
 msgid "Enable/Disable"
 msgstr ""
 
@@ -535,19 +535,19 @@ msgstr ""
 msgid "Enable cash gateway"
 msgstr ""
 
-#: includes/Gateways/Cash.php:55
+#: includes/Gateways/Cash.php:55 includes/Gateways/Custom_Card.php:55
 msgid "Title"
 msgstr ""
 
-#: includes/Gateways/Cash.php:57
+#: includes/Gateways/Cash.php:57 includes/Gateways/Custom_Card.php:57
 msgid "Payment method description that the marchent see in pos checkout"
 msgstr ""
 
-#: includes/Gateways/Cash.php:62
+#: includes/Gateways/Cash.php:62 includes/Gateways/Custom_Card.php:62
 msgid "Description"
 msgstr ""
 
-#: includes/Gateways/Cash.php:64
+#: includes/Gateways/Cash.php:64 includes/Gateways/Custom_Card.php:64
 msgid "Payment method description that marchent see in pos checkout page"
 msgstr ""
 
@@ -562,6 +562,31 @@ msgstr ""
 #: includes/Gateways/Cash.php:107
 #. translators: 1: Cash tendered amount 2: Cash change amount.
 msgid "Cash tendered amount: %1$s, Change amount: %2$s"
+msgstr ""
+
+#: includes/Gateways/Custom_Card.php:36 includes/Gateways/Custom_Card.php:58
+msgid "Credit Card"
+msgstr ""
+
+#: includes/Gateways/Custom_Card.php:37
+msgid "Have your customers pay with ccard"
+msgstr ""
+
+#: includes/Gateways/Custom_Card.php:49
+msgid "Enable Card gateway"
+msgstr ""
+
+#: includes/Gateways/Custom_Card.php:65
+msgid "Pay with Card"
+msgstr ""
+
+#: includes/Gateways/Custom_Card.php:103
+msgid "Payment collected via Credit Card"
+msgstr ""
+
+#: includes/Gateways/Custom_Card.php:107
+#. translators: 1: Credit Card tendered amount 2: Credit Card change amount.
+msgid "Credit Card tendered amount: %1$s, Change amount: %2$s"
 msgstr ""
 
 #: includes/REST/CustomerController.php:42

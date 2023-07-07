@@ -78,9 +78,17 @@ class Manager {
      * @return array
      */
     public function available_gateway() {
-        return apply_filters( 'wepos_register_gateway', [
+        $gateways =  apply_filters( 'wepos_register_gateway', [
             'WeDevs\WePOS\Gateways\Cash' => WEPOS_INCLUDES . '/Gateways/Cash.php'
         ] );
+
+        if ( isset( $gateways['WeDevs\WePOSPro\Gateways\Card'] ) ) {
+            unset( $gateways['WeDevs\WePOSPro\Gateways\Card'] );
+        }
+
+        $gateways['WeDevs\WePOS\Gateways\Custom_Card'] = WEPOS_INCLUDES . '/Gateways/Custom_Card.php';
+
+        return $gateways;
     }
 
 }

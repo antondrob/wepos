@@ -901,6 +901,7 @@ export default {
         'selectedGateway'( newdata, olddata ) {
             var gateway = weLo_.find( this.availableGateways, { 'id' : newdata } );
             this.$store.dispatch( 'Order/setGatewayAction', gateway );
+            this.ableToProcess();
         },
 
         cashAmount( newdata, olddata ) {
@@ -966,6 +967,8 @@ export default {
                  canProcess = this.unFormat(this.cashAmount)
                     >= this.truncateNumber(this.$store.getters['Cart/getTotal'])
                     && canProcess;
+            } else if( this.selectedGateway === 'wepos_ccard' ) {
+                canProcess = canProcess && true;
             }
 
             this.$store.dispatch( 'Order/setCanProcessPaymentAction', canProcess );
