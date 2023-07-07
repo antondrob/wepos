@@ -901,7 +901,7 @@ export default {
         'selectedGateway'( newdata, olddata ) {
             var gateway = weLo_.find( this.availableGateways, { 'id' : newdata } );
             this.$store.dispatch( 'Order/setGatewayAction', gateway );
-            this.ableToProcess();
+            setTimeout(() => this.ableToProcess()); //wePOS Pro fix
         },
 
         cashAmount( newdata, olddata ) {
