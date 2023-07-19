@@ -3,7 +3,7 @@
 Plugin Name: wePOS - Point Of Sale (POS) for WooCommerce (Onepix version)
 Plugin URI: https://wedevs.com/wepos
 Description: A beautiful and fast Point of Sale (POS) system for WooCommerce
-Version: 100.0.0
+Version: 101.0.0
 Author: weDevs
 Author URI: https://wedevs.com/
 Text Domain: wepos
