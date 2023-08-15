@@ -18,6 +18,7 @@ class Custom_Card extends \WC_Payment_Gateway {
         $this->init_settings();
 
         // Get settings.
+        $this->enabled            = false;
         $this->title              = $this->get_option( 'title' );
         $this->description        = $this->get_option( 'description' );
         $this->instructions       = $this->get_option( 'instructions' );
@@ -33,8 +34,8 @@ class Custom_Card extends \WC_Payment_Gateway {
     protected function setup_properties() {
         $this->id                 = 'wepos_ccard';
         $this->icon               = apply_filters( 'wepos_ccard_icon', '' );
-        $this->method_title       = __( 'Credit Card', 'wepos' );
-        $this->method_description = __( 'Have your customers pay with ccard', 'wepos' );
+        $this->method_title       = __( 'JUST WEPOS Credit Card', 'wepos' );
+        $this->method_description = __( 'JUST WEPOS Have your customers pay with ccard', 'wepos' );
         $this->has_fields         = false;
     }
 

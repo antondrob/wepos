@@ -18,6 +18,7 @@ class Cash extends \WC_Payment_Gateway {
         $this->init_settings();
 
         // Get settings.
+        $this->enabled            = false;
         $this->title              = $this->get_option( 'title' );
         $this->description        = $this->get_option( 'description' );
         $this->instructions       = $this->get_option( 'instructions' );
@@ -33,8 +34,8 @@ class Cash extends \WC_Payment_Gateway {
     protected function setup_properties() {
         $this->id                 = 'wepos_cash';
         $this->icon               = apply_filters( 'wepos_cash_icon', '' );
-        $this->method_title       = __( 'Cash', 'wepos' );
-        $this->method_description = __( 'Have your customers pay with cash', 'wepos' );
+        $this->method_title       = __( 'JUST WEPOS Cash', 'wepos' );
+        $this->method_description = __( 'JUST WEPOS Have your customers pay with cash', 'wepos' );
         $this->has_fields         = false;
     }
 

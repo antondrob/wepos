@@ -63,6 +63,12 @@ class Manager {
      * @return array
      */
     public function payment_gateways( $gateways ) {
+        if ( is_checkout()
+             || ( isset( $_GET['page'] ) && $_GET['page'] === 'wc-settings' && isset( $_GET['tab'] ) && $_GET['tab'] === 'checkout' )
+        ) {
+            return $gateways;
+        }
+
         $available_gateway = $this->available_gateway();
 
         // else add default POS gateways
@@ -82,9 +88,7 @@ class Manager {
             'WeDevs\WePOS\Gateways\Cash' => WEPOS_INCLUDES . '/Gateways/Cash.php'
         ] );
 
-        if ( isset( $gateways['WeDevs\WePOSPro\Gateways\Card'] ) ) {
-            unset( $gateways['WeDevs\WePOSPro\Gateways\Card'] );
-        }
+        unset( $gateways['WeDevs\WePOSPro\Gateways\Card'] );
 
         $gateways['WeDevs\WePOS\Gateways\Custom_Card'] = WEPOS_INCLUDES . '/Gateways/Custom_Card.php';
 
