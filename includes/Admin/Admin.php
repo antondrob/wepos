@@ -17,6 +17,8 @@ class Admin {
 
         add_action( 'created_term', array( $this, 'save_category_fields' ), 10, 3 );
         add_action( 'edit_term', array( $this, 'save_category_fields' ), 10, 3 );
+
+        add_action( 'woocommerce_order_get_formatted_billing_address', array( $this, 'format_billing_address'), 100, 3 );
     }
 
     /**
@@ -182,5 +184,13 @@ class Admin {
                 delete_term_meta( $term_id, '_wepos_most_popular' );
             }
         }
+    }
+
+    public function format_billing_address( $address, $raw_address, $order ) {
+        if ( empty( $address ) && 'wepos' === $order->get_created_via() ) {
+            $address = ' ';
+        }
+
+        return $address;
     }
 }
