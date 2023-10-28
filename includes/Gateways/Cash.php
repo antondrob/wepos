@@ -18,7 +18,7 @@ class Cash extends \WC_Payment_Gateway {
         $this->init_settings();
 
         // Get settings.
-        $this->enabled            = false;
+        $this->enabled            = 'yes';
         $this->title              = $this->get_option( 'title' );
         $this->description        = $this->get_option( 'description' );
         $this->instructions       = $this->get_option( 'instructions' );
@@ -34,8 +34,8 @@ class Cash extends \WC_Payment_Gateway {
     protected function setup_properties() {
         $this->id                 = 'wepos_cash';
         $this->icon               = apply_filters( 'wepos_cash_icon', '' );
-        $this->method_title       = __( 'JUST WEPOS Cash', 'wepos' );
-        $this->method_description = __( 'JUST WEPOS Have your customers pay with cash', 'wepos' );
+        $this->method_title       = __( 'Cash (only wePOS)', 'wepos' );
+        $this->method_description = __( 'Have your customers pay with cash', 'wepos' );
         $this->has_fields         = false;
     }
 
@@ -51,13 +51,15 @@ class Cash extends \WC_Payment_Gateway {
                 'type'        => 'checkbox',
                 'description' => '',
                 'default'     => 'yes',
+                'disabled'    => true
             ),
             'title'              => array(
                 'title'       => __( 'Title', 'wepos' ),
                 'type'        => 'text',
                 'description' => __( 'Payment method description that the marchent see in pos checkout', 'wepos' ),
-                'default'     => __( 'Cash', 'wepos' ),
+                'default'     => __( 'Cash wePOS', 'wepos' ),
                 'desc_tip'    => true,
+                'disabled'    => true
             ),
             'description'        => array(
                 'title'       => __( 'Description', 'wepos' ),
@@ -65,6 +67,7 @@ class Cash extends \WC_Payment_Gateway {
                 'description' => __( 'Payment method description that marchent see in pos checkout page', 'wepos' ),
                 'default'     => __( 'Pay with cash', 'wepos' ),
                 'desc_tip'    => true,
+                'disabled'    => true
             )
         );
     }
@@ -75,15 +78,7 @@ class Cash extends \WC_Payment_Gateway {
      * @return bool
      */
     public function is_available() {
-        $order          = null;
-        $needs_shipping = false;
-
-        // Test if shipping is needed first.
-        if ( is_page( wc_get_page_id( 'checkout' ) ) ) {
-            return true;
-        }
-
-        return parent::is_available();
+        return is_admin() || wepos_is_frontend();
     }
 
     /**

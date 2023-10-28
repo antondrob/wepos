@@ -63,12 +63,6 @@ class Manager {
      * @return array
      */
     public function payment_gateways( $gateways ) {
-        if ( is_checkout()
-             || ( isset( $_GET['page'] ) && $_GET['page'] === 'wc-settings' && isset( $_GET['tab'] ) && $_GET['tab'] === 'checkout' )
-        ) {
-            return $gateways;
-        }
-
         $available_gateway = $this->available_gateway();
 
         // else add default POS gateways
