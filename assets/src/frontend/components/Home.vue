@@ -1286,7 +1286,7 @@ export default {
             };
         },
         fetchCategories() {
-            wepos.api.get( wepos.rest.root + wepos.rest.posversion + '/products/categories?hide_empty=true&_fields=id,name,parent_id,most_popular&per_page=100' )
+            wepos.api.get( wepos.rest.root + wepos.rest.posversion + '/products/categories?hide_empty=true&_fields=id,name,parent_id,most_popular&per_page=1000' )
             .then( response => {
 
                 var tree = function (response, root) {

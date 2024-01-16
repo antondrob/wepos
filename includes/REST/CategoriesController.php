@@ -137,6 +137,19 @@ class CategoriesController extends WC_REST_Product_Categories_Controller {
 
         return $response;
     }
+
+    /**
+     * Get the query params for collections
+     *
+     * @return array
+     */
+    public function get_collection_params() {
+        $params = parent::get_collection_params();
+
+        $params['per_page']['maximum'] = 1000;
+
+        return $params;
+    }
 }
 
 add_filter( 'woocommerce_rest_prepare_product_cat',function($response, $item, $request){
