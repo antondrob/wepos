@@ -1212,8 +1212,8 @@ export default {
             this.$store.dispatch( 'Cart/addToCartAction', product );
         },
         addKioskToCart( product ) {
-            if (!product.price || !product.sku) {
-                alert( 'Empty price or Kiosk order number' );
+            if (!product.price) {
+                alert( 'Empty price' );
                 return;
             }
 

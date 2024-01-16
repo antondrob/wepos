@@ -168,8 +168,8 @@ export default {
         addKioskToCart( state, product ) {
             var cartObject = {};
             cartObject.type               = 'kiosk';
-            cartObject.product_id         = `kiosk-${product.sku}` ;
-            cartObject.name               = `PRINTS (${product.sku})`;
+            cartObject.product_id         = `kiosk-${product.sku || Date.now()}` ;
+            cartObject.name               = `PRINTS ${product.sku ? `(${product.sku})` : '' }`.trim();
             cartObject.regular_price      = product.price;
             cartObject.quantity           = 1;
 
